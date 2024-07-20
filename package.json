@@ -2,7 +2,11 @@
   "name": "@react-monorepo/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "next build",
+    "lint": "eslint ./src",
+    "test": "node ./run-tests.js"
+  },
   "private": true,
   "dependencies": {
     "react": "18.3.1",
@@ -51,5 +55,6 @@
     "typescript": "~5.5.2",
     "vite": "^5.0.0",
     "vitest": "^1.3.1"
-  }
+  },
+  "nx": {}
 }
