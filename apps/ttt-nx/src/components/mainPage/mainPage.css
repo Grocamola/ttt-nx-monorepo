@@ -1,0 +1,120 @@
+
+.mainpage--title { 
+    width: fit-content;
+    margin: 150px auto 20px;
+}
+
+
+.modal { 
+    width: 110vw;
+    height: 110vh;
+    top: -5px;
+    left: -5px;
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    z-index:1;
+    background-color: #00000090
+}
+.loginForm--container { 
+    z-index: 5;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    background-color: white;
+    padding: 30px 50px 10px 50px;
+    border-radius: 20px;
+}
+.loginForm--container form p { 
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    line-height: 2rem;
+}
+.loginForm--container form p input { 
+    height: 1.3rem;
+    padding: 3px 10px;
+}
+.loginForm--container form p button { 
+    width: 100px;
+    height: 28px;
+    margin: 20px auto 0;
+}
+.loginForm--container ul {
+    padding: 0;
+    margin: 0 0 20px 0;
+    width: 100%;
+}
+.usernameInvite { 
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    border: none;
+    border-bottom: 1px dotted #ccc;
+    justify-content: space-between;
+}
+
+.invitation { 
+    z-index: 100;
+    width: 400px;
+    height: 150px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    padding: 30px;
+    background-color: white;
+    border: none;
+    border-radius: 30px;
+}
+.invitation button { 
+    width: 80px;
+    height: 30px;
+    margin: 5px;
+}
+
+
+.board { 
+    width: fit-content;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+.board-history, .board-chat { 
+    width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid blue;
+}
+.board-board { 
+    width: 302px;
+    height: 302px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    box-sizing: border-box;
+}
+.board--box { 
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 35px;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+    background-color: #e0e0e0;
+    border: 3px solid white;
+    border-radius: 10px;
+}
+.board--box:active { 
+    background-color: #ccc;
+}

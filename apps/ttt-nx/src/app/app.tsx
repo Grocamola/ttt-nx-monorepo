@@ -1,12 +1,14 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import MainPage from '../components/mainPage/mainPage';
 import styles from './app.module.css';
 
-import NxWelcome from './nx-welcome';
+// import NxWelcome from './nx-welcome';
 
 export function App() {
   return (
     <div>
-      <NxWelcome title="ttt-nx" />
+      {/* <NxWelcome title="ttt-nx" /> */}
+      <MainPage />
     </div>
   );
 }
