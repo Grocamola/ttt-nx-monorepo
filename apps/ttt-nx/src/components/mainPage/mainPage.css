@@ -5,7 +5,7 @@
 }
 
 .board-title { 
-    margin: 150px auto 20px;
+    margin: 150px auto 0;
     width: fit-content;
     font-size: 25px;
 }
@@ -121,4 +121,55 @@
 }
 .board--box:active { 
     background-color: #ccc;
+}
+
+
+.board-chat { 
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    height: fit-content;
+    min-height: 350px;
+    margin: 0 20px;
+    box-sizing: border-box;
+}
+.ttt_messageinputfields { 
+    margin: 10px 0;
+    width: 100%;
+    padding: 0;
+}
+.ttt_messageinputfields input { 
+    width: 97%;
+    height: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.ttt_messageinputfields button { 
+    margin: 10px 5px 5px;
+}
+.ttt_messages { 
+    background-color: #898989;
+    height: 220px;
+    width: 100%;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.myMessage { 
+    display:block;
+    text-align: right;
+    width: 100%;
+}
+.otherMessage { 
+    display:block;
+    float: left;
+    width: 100%;
 }

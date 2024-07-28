@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import socket from '../socket/socket';
 import './mainPage.css';
 import LoginForm from "../loginForm/loginForm";
-import { signinResponseType, moveResponseType, gameStartType } from '../types-interfaces/types';
+import { signinResponseType, moveResponseType, gameStartType, ChatMessage } from '../types-interfaces/types';
 
 const MainPage = (): ReactElement => {
     const [username, setUsername] = useState<string | null>(null);
@@ -14,11 +14,16 @@ const MainPage = (): ReactElement => {
     const [winner, setWinner] = useState<"X" | "O" | "tie" | "">('')
     const [invitation, setInvitation] = useState<{ from: string, to: string } | null>(null);
 
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [message, setMessage] = useState<string>("");
+
     const boxClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
         const value = e.currentTarget.getAttribute('data-value');
         const rowIndex = Number(e.currentTarget.getAttribute('data-row'));
         const colIndex = Number(e.currentTarget.getAttribute('data-col'));
         let currentPlayer = player;
+
+        if(winner !== "") return;
 
         if (value !== "X" && value !== "O") {
             console.log(currentPlayer, username, players);
@@ -47,6 +52,11 @@ const MainPage = (): ReactElement => {
 
     const handleDeclineInvitation = () => {
         setInvitation(null); // Clear invitation
+    };
+
+    const sendMessage = () => {
+        socket.emit('new-message', { sender: username, message });
+        setMessage(""); // Clear the input after sending the message
     };
 
     useEffect(() => {
@@ -81,7 +91,7 @@ const MainPage = (): ReactElement => {
             socket.off('activeUsers');
             socket.off('receive-invitation');
         };
-    }, [username, player]);
+    }, [username]);
 
     useEffect(() => {
         socket.on('move-response', (data: moveResponseType) => {
@@ -89,12 +99,17 @@ const MainPage = (): ReactElement => {
             setBoard(data.board);
             setPlayer(data.nextPlayer);
             setMoves(data.moves);
-            data.isTie === true && setWinner("tie")
-            data.winner !== "" && setWinner(data.winner)
+            data.isTie === true && setWinner("tie");
+            data.winner !== "" && setWinner(data.winner);
+        });
+
+        socket.on('message-broadcast', (data: ChatMessage) => {
+            setMessages(prev => [...prev, data]);
         });
 
         return () => {
             socket.off('move-response');
+            socket.off('message-broadcast');
         };
     }, []);
 
@@ -161,7 +176,25 @@ const MainPage = (): ReactElement => {
                             )}
                         </div>
                         <div className="board-chat">
-                            <h4>Message here:</h4>
+                            <h4>Chat here</h4>
+                            {username && <div className="ttt_messages">
+                                {messages.map((msg, index) => (
+                                <p key={index} className={msg.sender === username ? 'myMessage' : 'otherMessage'}>{msg.message}</p>
+                                ))}
+                            </div>}
+                            {username && <div className="ttt_messageinputfields">
+                                <div className="ttt_ChatInput">
+                                <input
+                                    type="text"
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    placeholder="type here..."
+                                />
+                                </div>
+                                <div className="ttt_messageSendbtn">
+                                <button onClick={sendMessage}>SEND</button>
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 </>

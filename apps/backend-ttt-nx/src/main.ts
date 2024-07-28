@@ -62,20 +62,46 @@ const WinnerCheck = (board) => {
   }
 }
 
+const clearBoard = () => {
+  board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+  moves = [];
+  winner = "";
+  winnerClass = "";
+  isTie = false;
+};
+
+const handleMove = (socket, data) => {
+  const { rowIndex, colIndex, currentPlayer } = data;
+  board[rowIndex][colIndex] = currentPlayer;
+  moves.push([currentPlayer, rowIndex + 1, colIndex + 1]);
+  WinnerCheck(board);
+
+  io.emit('move-response', {
+    board,
+    currentPlayer,
+    moves,
+    winner,
+    winnerClass,
+    isTie,
+    nextPlayer: currentPlayer === "X" ? "O" : "X"
+  });
+};
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   socket.on('disconnect', () => {
     delete activeUsers[socket.id];
+    const session = gameSessions[socket.id];
+    if (session) {
+      const opponentSocketId = session.opponent;
+      if (opponentSocketId) {
+        io.to(opponentSocketId).emit('game-end', { message: 'Opponent disconnected' });
+      }
+      delete gameSessions[opponentSocketId];
+      delete gameSessions[socket.id];
+    }
     io.emit('activeUsers', Object.values(activeUsers));
-
-    board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-    currentPlayer = "X";
-    moves = [];
-
-    winner = "";
-    winnerClass = "";
-    isTie = false;
   });
 
   socket.on('signin', async (formData) => {
@@ -111,51 +137,45 @@ io.on('connection', (socket) => {
 
   socket.on('accept-invitation', (data) => {
     const { from, to } = data;
-    console.log(`Invitation accepted by ${to} from ${from}`);
-    const fromSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === from);
-    const toSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === to);
+    const playerXSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === from);
+    const playerOSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === to);
 
-    if (fromSocketId && toSocketId) {
-      const gameId = `${fromSocketId}-${toSocketId}`;
-      gameSessions[gameId] = { fromSocketId, toSocketId };
+    if (playerXSocketId && playerOSocketId) {
+      gameSessions[playerXSocketId] = { opponent: playerOSocketId, player: "X" };
+      gameSessions[playerOSocketId] = { opponent: playerXSocketId, player: "O" };
 
-      board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-      currentPlayer = "X";
-      moves = [];
-
-      const players = { X: from, O: to };
-      console.log(`Game start: ${from} (X) vs ${to} (O)`);
-      io.to(fromSocketId).emit('game-start', { board, currentPlayer, moves, players });
-      io.to(toSocketId).emit('game-start', { board, currentPlayer, moves, players });
+      io.to(playerXSocketId).emit('game-start', {
+        board,
+        currentPlayer: "X",
+        moves,
+        players: { X: from, O: to }
+      });
+      io.to(playerOSocketId).emit('game-start', {
+        board,
+        currentPlayer: "X",
+        moves,
+        players: { X: from, O: to }
+      });
     }
   });
 
   socket.on('move', (data) => {
-    const { rowIndex, colIndex, currentPlayer } = data;
-    console.log(`Move: ${currentPlayer} to row ${rowIndex}, col ${colIndex}`);
-
-    board[rowIndex][colIndex] = currentPlayer;
-    console.log('Updated board:', board);
-    moves.push([currentPlayer, rowIndex, colIndex]);
-
-    WinnerCheck(board);
-    console.log(winner)
-
-    const nextPlayer = currentPlayer === "X" ? "O" : "X";
-    console.log(`Next player: ${nextPlayer}`);
-
-    const gameId = Object.keys(gameSessions).find(id => gameSessions[id].fromSocketId === socket.id || gameSessions[id].toSocketId === socket.id);
-    if (gameId) {
-      const { fromSocketId, toSocketId } = gameSessions[gameId];
-      console.log(`Emitting move-response to ${fromSocketId} and ${toSocketId}`);
-
-      const moveResponseData = { board, nextPlayer, moves, winner, isTie };
-      console.log('Move response data:', moveResponseData);
-
-      io.to(fromSocketId).emit('move-response', moveResponseData);
-      io.to(toSocketId).emit('move-response', moveResponseData);
+    const session = gameSessions[socket.id];
+    if (session) {
+      handleMove(socket, data);
     } else {
-      console.error('Game session not found for socket ID:', socket.id);
+      console.error('Invalid game session for socket ID:', socket.id);
+    }
+  });
+
+  socket.on('new-message', (data) => {
+    const session = gameSessions[socket.id];
+    if (session) {
+      const recipientSocketId = session.opponent;
+      io.to(recipientSocketId).emit('message-broadcast', data);
+      io.to(socket.id).emit('message-broadcast', data);
+    } else {
+      console.error('Invalid game session for socket ID:', socket.id);
     }
   });
 
