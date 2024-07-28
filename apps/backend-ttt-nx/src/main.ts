@@ -68,6 +68,14 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     delete activeUsers[socket.id];
     io.emit('activeUsers', Object.values(activeUsers));
+
+    board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    currentPlayer = "X";
+    moves = [];
+
+    winner = "";
+    winnerClass = "";
+    isTie = false;
   });
 
   socket.on('signin', async (formData) => {
@@ -131,6 +139,7 @@ io.on('connection', (socket) => {
     moves.push([currentPlayer, rowIndex, colIndex]);
 
     WinnerCheck(board);
+    console.log(winner)
 
     const nextPlayer = currentPlayer === "X" ? "O" : "X";
     console.log(`Next player: ${nextPlayer}`);
@@ -140,7 +149,7 @@ io.on('connection', (socket) => {
       const { fromSocketId, toSocketId } = gameSessions[gameId];
       console.log(`Emitting move-response to ${fromSocketId} and ${toSocketId}`);
 
-      const moveResponseData = { board, nextPlayer, moves };
+      const moveResponseData = { board, nextPlayer, moves, winner, isTie };
       console.log('Move response data:', moveResponseData);
 
       io.to(fromSocketId).emit('move-response', moveResponseData);

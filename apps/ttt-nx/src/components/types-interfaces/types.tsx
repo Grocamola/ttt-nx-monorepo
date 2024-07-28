@@ -24,6 +24,8 @@ export interface moveResponseType {
     board: (number | "X" | "O")[][],
     nextPlayer: "X" | "O"
     moves: (number | string)[][]
+    winner: "X" | "O" | ""
+    isTie: boolean
 }
 
 export interface gameStartType {

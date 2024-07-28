@@ -11,6 +11,7 @@ const MainPage = (): ReactElement => {
     const [players, setPlayers] = useState({ X: '', O: '' });
     const [player, setPlayer] = useState<"X" | "O">('X');
     const [moves, setMoves] = useState<(number | string)[][]>([]);
+    const [winner, setWinner] = useState<"X" | "O" | "tie" | "">('')
     const [invitation, setInvitation] = useState<{ from: string, to: string } | null>(null);
 
     const boxClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -88,6 +89,8 @@ const MainPage = (): ReactElement => {
             setBoard(data.board);
             setPlayer(data.nextPlayer);
             setMoves(data.moves);
+            data.isTie === true && setWinner("tie")
+            data.winner !== "" && setWinner(data.winner)
         });
 
         return () => {
@@ -129,7 +132,11 @@ const MainPage = (): ReactElement => {
             )}
             {board.length > 0 && (
                 <>
-                    <p className="mainpage--title">Player {player}'s turn</p>
+                    <div className="board-title">
+                        {winner !== "" ? 
+                            <p>Player {winner} Won!</p> : 
+                            <p className="mainpage--title">Player {player}'s turn</p>}
+                    </div>
                     <div className="board">
                         <div className="board-history">
                             <h4>Moves</h4>

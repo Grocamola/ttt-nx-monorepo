@@ -4,6 +4,11 @@
     margin: 150px auto 20px;
 }
 
+.board-title { 
+    margin: 150px auto 20px;
+    width: fit-content;
+    font-size: 25px;
+}
 
 .modal { 
     width: 110vw;
@@ -87,10 +92,9 @@
     gap: 5px;
 }
 .board-history, .board-chat { 
-    width: 300px;
+    width: 200px;
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid blue;
 }
 .board-board { 
     width: 302px;
