@@ -1,0 +1,24 @@
+{
+  "name": "backend-ttt-nx",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend-ttt-nx/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "backend-ttt-nx:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "backend-ttt-nx:build:development"
+        },
+        "production": {
+          "buildTarget": "backend-ttt-nx:build:production"
+        }
+      }
+    }
+  }
+}
