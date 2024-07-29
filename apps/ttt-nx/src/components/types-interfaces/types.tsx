@@ -22,10 +22,21 @@ interface RecordData {
 
 export interface moveResponseType { 
     board: (number | "X" | "O")[][],
-    nextPlayer: "X" | "O"
-    moves: (number | string)[][]
-    winner: "X" | "O" | ""
-    isTie: boolean
+    nextPlayer: "X" | "O",
+    moves: (number | string)[][],
+    winner: "X" | "O" | "",
+    isTie: boolean,
+    winnerClass: string
+}
+
+export interface newGameResponseType { 
+    board: (number | "X" | "O")[][],
+    nextPlayer: "X" | "O",
+    moves: (number | string)[][],
+    winner: "X" | "O" | "",
+    isTie: boolean,
+    winnerClass: string,
+    score: {playerX: number, playerO: number}
 }
 
 export interface gameStartType {

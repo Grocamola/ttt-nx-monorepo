@@ -1,8 +1,26 @@
 
+.button { 
+    margin: 0 auto;
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+.logout-btn { 
+    position: fixed;
+    right: 30px;
+    top: 50px;
+}
 .mainpage--title { 
     width: fit-content;
-    margin: 150px auto 20px;
+    margin: 50px auto 20px;
 }
+.newPlay-btn { 
+    margin-top: 30px;
+    width: 150px;
+}
+
+
 
 .board-title { 
     margin: 150px auto 0;
@@ -172,4 +190,46 @@
     display:block;
     float: left;
     width: 100%;
+}
+
+
+
+.winner-check { 
+    height: 310px;
+    width: 5px;
+    border-radius: 5px;
+    background-color: red;
+    position: absolute;
+}
+.col-right { 
+    transform: translateX(100px) translateY(-5px)
+}
+.col-center { 
+    transform: translateX(0)
+}
+.col-left { 
+    transform: translateX(-100px) translateY(-5px)
+}
+.row-up { 
+    transform: translateY(-100px) rotate(90deg) translateX(-5px)
+}
+.row-center { 
+    transform: translateY(0) rotate(90deg)
+}
+.row-down { 
+    transform: translateY(100px) rotate(90deg) translateX(-5px)
+}
+.diagonal-left { 
+    transform:rotate(-45deg)
+}
+.diagonal-right {
+    transform:rotate(45deg) translateX(-5px)
+}
+
+.score-display { 
+    display: block;
+    width: 100%;
+    margin: 30px auto 0;
+    text-align: center;
+
 }
