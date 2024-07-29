@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from "react";
 import socket from '../socket/socket';
 import './mainPage.css';
 import LoginForm from "../loginForm/loginForm";
-import { signinResponseType, moveResponseType, gameStartType, ChatMessage } from '../types-interfaces/types';
+import { signinResponseType, moveResponseType, gameStartType, ChatMessage, newGameResponseType } from '../types-interfaces/types';
 
 const MainPage = (): ReactElement => {
     const [username, setUsername] = useState<string | null>(null);
@@ -12,6 +12,8 @@ const MainPage = (): ReactElement => {
     const [player, setPlayer] = useState<"X" | "O">('X');
     const [moves, setMoves] = useState<(number | string)[][]>([]);
     const [winner, setWinner] = useState<"X" | "O" | "tie" | "">('')
+    const [score, setScore] = useState({playerX: 0, playerO: 0});
+    const [winnerCheck, setWinnerCheck] = useState<string>('')
     const [invitation, setInvitation] = useState<{ from: string, to: string } | null>(null);
 
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -59,6 +61,28 @@ const MainPage = (): ReactElement => {
         setMessage(""); // Clear the input after sending the message
     };
 
+    const logoutHandler = () => {
+        socket.emit('user-logout', { username });
+
+        clearState()
+    }
+
+    const newGameHandler = () => {
+        socket.emit('new-game-request')
+    }
+
+    const clearState = () => { 
+        setUsername('')
+        setActiveUsers([])
+        setBoard([])
+        setPlayers({ X: '', O: '' })
+        setMoves([])
+        setWinner('')
+        setWinnerCheck('')
+        setInvitation(null)
+        setMessages([])
+    }
+
     useEffect(() => {
         socket.on('signin-response', (data: signinResponseType) => {
             console.log('Signin response:', data);
@@ -85,11 +109,17 @@ const MainPage = (): ReactElement => {
             }
         });
 
+        socket.on('game-end', (data: string) => {
+            console.log(data)
+            clearState()
+        })
+
         return () => {
             socket.off('signin-response');
             socket.off('game-start');
             socket.off('activeUsers');
             socket.off('receive-invitation');
+            socket.off('game-end')
         };
     }, [username]);
 
@@ -101,6 +131,18 @@ const MainPage = (): ReactElement => {
             setMoves(data.moves);
             data.isTie === true && setWinner("tie");
             data.winner !== "" && setWinner(data.winner);
+            data.winnerClass !== '' && setWinnerCheck(data.winnerClass)
+        });
+
+        socket.on('new-game-response', (data: newGameResponseType) => {
+            console.log('Move response:', data);
+            setBoard(data.board);
+            setPlayer(data.nextPlayer);
+            setMoves(data.moves);
+            data.isTie === true ? setWinner("tie") : null;
+            data.winner !== "" ? setWinner(data.winner) : setWinner('');
+            data.winnerClass !== '' ? setWinnerCheck(data.winnerClass) : setWinnerCheck('')
+            setScore(data.score)
         });
 
         socket.on('message-broadcast', (data: ChatMessage) => {
@@ -110,6 +152,7 @@ const MainPage = (): ReactElement => {
         return () => {
             socket.off('move-response');
             socket.off('message-broadcast');
+            socket.off('new-game-response')
         };
     }, []);
 
@@ -138,7 +181,7 @@ const MainPage = (): ReactElement => {
                             {activeUsers.map((user, index) => (
                                 <li className="usernameInvite" key={index}>
                                     <div>{user}</div>
-                                    <button onClick={() => handleSendInvitation(user)}>Play</button>
+                                    {user !== username ? <button onClick={() => handleSendInvitation(user)}>Play</button> : <p style={{margin: 0}}>Me</p>}
                                 </li>
                             ))}
                         </ul>
@@ -147,6 +190,7 @@ const MainPage = (): ReactElement => {
             )}
             {board.length > 0 && (
                 <>
+                    <button className="button logout-btn" onClick={logoutHandler}>Logout</button>
                     <div className="board-title">
                         {winner !== "" ? 
                             <p>Player {winner} Won!</p> : 
@@ -162,6 +206,7 @@ const MainPage = (): ReactElement => {
                             </ul>
                         </div>
                         <div className="board-board">
+                            <div className={`${winnerCheck !== '' && 'winner-check'} ${winnerCheck}`} />
                             {board.map((row, rowIndex) =>
                                 row.map((box, colIndex) => (
                                     <div key={`${rowIndex}-${colIndex}`}
@@ -174,7 +219,10 @@ const MainPage = (): ReactElement => {
                                     </div>
                                 ))
                             )}
+                            <button className="button newPlay-btn" onClick={newGameHandler}>NEW PLAY</button>
+                            {(score.playerX > 0 || score.playerO > 0) && <p className="score-display">{`Score X: ${score.playerX} - score O: ${score.playerO}`}</p>}
                         </div>
+                        
                         <div className="board-chat">
                             <h4>Chat here</h4>
                             {username && <div className="ttt_messages">
@@ -197,6 +245,7 @@ const MainPage = (): ReactElement => {
                             </div>}
                         </div>
                     </div>
+                    
                 </>
             )}
         </>
