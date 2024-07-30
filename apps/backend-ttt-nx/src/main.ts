@@ -75,7 +75,7 @@ const clearBoard = () => {
 const handleMove = (socket, data) => {
   const { rowIndex, colIndex, currentPlayer } = data;
   board[rowIndex][colIndex] = currentPlayer;
-  moves.push([currentPlayer, rowIndex + 1, colIndex + 1]);
+  currentPlayer.length > 0 && moves.push([currentPlayer, rowIndex + 1, colIndex + 1]);
   WinnerCheck(board);
 
   io.emit('move-response', {

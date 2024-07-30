@@ -192,9 +192,12 @@ const MainPage = (): ReactElement => {
                 <>
                     <button className="button logout-btn" onClick={logoutHandler}>Logout</button>
                     <div className="board-title">
-                        {winner !== "" ? 
-                            <p>Player {winner} Won!</p> : 
-                            <p className="mainpage--title">Player {player}'s turn</p>}
+                        {winner === "" ? 
+                            (username === players[player]) ? <p>Your turn!</p> 
+                            : <p className="mainpage--title">Player {player}'s turn</p> : 
+                            winner === "tie" ? <p>Tie!</p> :
+                            <p>Player {winner} Won!</p>
+                        }
                     </div>
                     <div className="board">
                         <div className="board-history">
@@ -203,6 +206,7 @@ const MainPage = (): ReactElement => {
                                 {moves.length > 0 && moves.map((move, index) => (
                                     <li key={index}>{`${move[0]} : row ${move[1]}, col ${move[2]}`}</li>
                                 ))}
+                                {moves.length === 0 && <p>No moves yet.</p>}
                             </ul>
                         </div>
                         <div className="board-board">

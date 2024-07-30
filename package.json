@@ -5,7 +5,8 @@
   "scripts": {
     "build": "next build",
     "lint": "eslint ./src",
-    "test": "node ./run-tests.js"
+    "test": "node ./run-tests.js",
+    "cypress:open": "cypress open"
   },
   "private": true,
   "dependencies": {

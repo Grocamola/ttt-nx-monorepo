@@ -1,6 +1,10 @@
 <<<<<<< HEAD
 # ttt-nx-monorepo
 using nx for tic-tac-toe project
+
+Please use this command to run the project locally:
+nx run-many --parallel --target=serve --projects=ttt-nx,backend-ttt-nx
+
 =======
 # ReactMonorepo
 
