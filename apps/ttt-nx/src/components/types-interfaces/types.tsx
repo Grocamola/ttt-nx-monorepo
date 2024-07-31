@@ -20,23 +20,19 @@ interface RecordData {
 }
 
 
-export interface moveResponseType { 
-    board: (number | "X" | "O")[][],
-    nextPlayer: "X" | "O",
-    moves: (number | string)[][],
-    winner: "X" | "O" | "",
-    isTie: boolean,
-    winnerClass: string
+interface BaseGameResponse {
+    board: (number | "X" | "O")[][];
+    nextPlayer: "X" | "O";
+    moves: (number | string)[][];
+    winner: "X" | "O" | "";
+    isTie: boolean;
+    winnerClass: string;
 }
 
-export interface newGameResponseType { 
-    board: (number | "X" | "O")[][],
-    nextPlayer: "X" | "O",
-    moves: (number | string)[][],
-    winner: "X" | "O" | "",
-    isTie: boolean,
-    winnerClass: string,
-    score: {playerX: number, playerO: number}
+export interface moveResponseType extends BaseGameResponse {}
+
+export interface newGameResponseType extends BaseGameResponse {
+    score: { playerX: number; playerO: number };
 }
 
 export interface gameStartType {
