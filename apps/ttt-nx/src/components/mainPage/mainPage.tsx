@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import socket from '../socket/socket';
 
 import LoginForm from "../loginForm/loginForm";
@@ -160,10 +160,10 @@ const MainPage = (): ReactElement => {
     }, []);
 
     return (
-        <div className={Styles()}>
+        <div>
             {!username && (
                 <div>
-                    <div className="modal" />
+                    {!username && <div className={Styles()} />}
                     <div className="loginForm--container"  data-testid="login-form">
                         <LoginForm />
                     </div>
@@ -176,9 +176,9 @@ const MainPage = (): ReactElement => {
                     <button onClick={handleDeclineInvitation}>Decline</button>
                 </div>
             )}
-            {username && activeUsers.length > 0 && board.length < 2 && (
+            {username && activeUsers.length > 0 && board.length === 0 && (
                 <div>
-                    <div className="modal" />
+                    <div  className={Styles()} />
                     <div className="loginForm--container">
                         <ul>
                             {activeUsers.map((user, index) => (
