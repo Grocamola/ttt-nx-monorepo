@@ -5,7 +5,10 @@
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["vite/client","jest", "@testing-library/jest-dom", "node"]
+    "types": ["vite/client", "jest", "@testing-library/jest-dom", "node"],
+    "paths": {
+      "@my-org/styles": ["libs/styles/styles/src/index.ts"]
+    }
   },
   "files": [],
   "include": [],
