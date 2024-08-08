@@ -18,7 +18,7 @@
 // src/components/mainPage/mainPage.test.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import MainPage from '../components/mainPage/mainPage';
+import MainPage from '../components/mainPage/MainPage';
 
 test('renders welcome text', () => {
   render(<MainPage />);
