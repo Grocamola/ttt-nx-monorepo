@@ -4,7 +4,6 @@ import MainPage from './MainPage';
 import socket from '../../../__mocks__/socket';
 
 
-
 describe('MainPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();

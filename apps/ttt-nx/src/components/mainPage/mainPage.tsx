@@ -4,7 +4,7 @@ import socket from '../socket/socket';
 import LoginForm from "../loginForm/loginForm";
 import { signinResponseType, moveResponseType, gameStartType, ChatMessage, newGameResponseType } from '../types-interfaces/types';
 
-import { Styles } from '@my-org/styles';
+import { Styles } from '../../../../../libs/styles/styles/src/lib/styles';
 import './mainPage.css';
 
 const MainPage = (): ReactElement => {
