@@ -1,6 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'ttt-nx',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   preset: '../../jest.preset.js',
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
@@ -8,4 +9,13 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/ttt-nx',
+};
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '^../socket/socket$': '<rootDir>/__mocks__/socket.ts',
+  },
 };

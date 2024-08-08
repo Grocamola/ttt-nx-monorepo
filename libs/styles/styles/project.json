@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "my-styles": {
+      "root": "libs/styles",
+      "sourceRoot": "libs/styles/styles/src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/workspace:package",
+          "options": {
+            "tsConfig": "libs/styles/styles/tsconfig.lib.json",
+            "project": "libs/styles/styles/package.json"
+          }
+        }
+      }
+    }
+  }
+}

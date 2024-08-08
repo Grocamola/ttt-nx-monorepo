@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@react-monorepo/styles/styles": ["libs/styles/styles/src/index.ts"],
+      "@react-monorepo/ttt-styles": ["ttt-styles/src/index.ts"],
+      "@my-org/styles": ["libs/styles/styles/src/index.ts"],
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,8 +1,11 @@
 import { ReactElement, useEffect, useState } from "react";
 import socket from '../socket/socket';
-import './mainPage.css';
+
 import LoginForm from "../loginForm/loginForm";
 import { signinResponseType, moveResponseType, gameStartType, ChatMessage, newGameResponseType } from '../types-interfaces/types';
+
+import { Styles } from '@my-org/styles';
+import './mainPage.css';
 
 const MainPage = (): ReactElement => {
     const [username, setUsername] = useState<string | null>(null);
@@ -157,11 +160,11 @@ const MainPage = (): ReactElement => {
     }, []);
 
     return (
-        <>
+        <div className={Styles()}>
             {!username && (
                 <div>
                     <div className="modal" />
-                    <div className="loginForm--container">
+                    <div className="loginForm--container"  data-testid="login-form">
                         <LoginForm />
                     </div>
                 </div>
@@ -252,7 +255,7 @@ const MainPage = (): ReactElement => {
                     
                 </>
             )}
-        </>
+        </div>
     );
 };
 
