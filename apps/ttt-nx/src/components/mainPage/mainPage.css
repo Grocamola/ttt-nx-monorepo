@@ -11,7 +11,7 @@ button {
     width: auto;
     height: auto;
     padding: 4px 15px;
-    border-radius: 10px;
+    border-radius: 15px;
     border: none;
     border: 1px solid #ccc;
 }
@@ -49,8 +49,8 @@ button {
     left: 50%;
     transform: translateY(-50%) translateX(-50%);
     background-color: white;
-    padding: 30px 50px 10px 50px;
-    border-radius: 20px;
+    padding: 30px 50px 20px;
+    border-radius: 30px;
 }
 .loginForm--container form p { 
     width: 100%;
@@ -58,15 +58,18 @@ button {
     justify-content: space-between;
     gap: 20px;
     line-height: 2rem;
+    margin: 0;
 }
 .loginForm--container form p input { 
     height: 1.3rem;
     padding: 3px 10px;
+    border-radius: 2px;
+    border: 1px solid #888;
 }
 .loginForm--container form p button { 
     width: 100px;
     height: 28px;
-    margin: 20px auto 0;
+    margin: 5px auto 10px;
 }
 .loginForm--container ul {
     padding: 0;
@@ -75,7 +78,7 @@ button {
 }
 .usernameInvite { 
     width: 100%;
-    padding: 5px 5px;
+    padding: 5px 10px 5px;
     display: flex;
     flex-direction: row;
     gap: 100px;
@@ -83,6 +86,15 @@ button {
     border-bottom: 1px dotted #ccc;
     justify-content: space-between;
     line-height: 1.8rem;
+    box-sizing: border-box;
+}
+.usernameInvite:has(button) { 
+    padding-right: 0;
+
+}
+.form-error {
+    color: red;
+    font-size: 0.9rem;
 }
 
 /* INVITATION */

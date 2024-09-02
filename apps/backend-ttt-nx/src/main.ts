@@ -4,6 +4,8 @@ const http = require('http');
 const { Server } = require('socket.io');
 const PocketBase = require('pocketbase/cjs');
 
+import { WinnerCheck } from "./functions/winnerCheck";
+
 const app = express();
 const pb = new PocketBase('https://ttt-nx.pockethost.io/');
 const server = http.createServer(app);
@@ -32,37 +34,6 @@ let winner = "";
 let winnerClass = "";
 let isTie = false;
 
-const WinnerCheck = (board) => {
-  for (let col = 0; col < board.length; col++) {
-    if (board[0][col] === board[1][col] && board[1][col] === board[2][col]) {
-      winner = board[0][col];
-      winnerClass = col === 0 ? 'col-left' : col === 1 ? 'col-center' : col === 2 ? 'col-right' : '';
-      return;
-    }
-  }
-  for (let row = 0; row < board.length; row++) {
-    if (board[row][0] === board[row][1] && board[row][1] === board[row][2]) {
-      winner = board[row][0];
-      winnerClass = row === 0 ? 'row-up' : row === 1 ? 'row-center' : row === 2 ? 'row-down' : '';
-      return;
-    }
-  }
-  if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-    winner = board[0][0];
-    winnerClass = 'diagonal-left';
-    return;
-  }
-  if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
-    winner = board[0][2];
-    winnerClass = 'diagonal-right';
-    return;
-  }
-  if (board.flat().every(cell => isNaN(cell))) {
-    isTie = true;
-    return;
-  }
-}
-
 const clearBoard = () => {
   board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
   moves = [];
@@ -76,7 +47,7 @@ const handleMove = (socket, data) => {
   const { rowIndex, colIndex, currentPlayer } = data;
   board[rowIndex][colIndex] = currentPlayer;
   currentPlayer.length > 0 && moves.push([currentPlayer, rowIndex + 1, colIndex + 1]);
-  WinnerCheck(board);
+  ({winner, winnerClass, isTie} = WinnerCheck(board, winner, winnerClass, isTie));
 
   io.emit('move-response', {
     board,

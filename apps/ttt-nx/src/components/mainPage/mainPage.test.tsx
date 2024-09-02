@@ -3,12 +3,10 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import MainPage from './MainPage';
 import socket from '../../../__mocks__/socket';
 
-
 describe('MainPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
 
   it('renders login form when username is not set', async () => {
     render(<MainPage />);
@@ -27,7 +25,11 @@ describe('MainPage', () => {
       }
       if (event === 'game-start') {
         callback({
-          board: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+          board: [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
           currentPlayer: 'X',
           moves: [],
           players: { X: 'testUser', O: 'otherUser' },
@@ -60,7 +62,11 @@ describe('MainPage', () => {
       }
       if (event === 'game-start') {
         callback({
-          board: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+          board: [
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
           currentPlayer: 'X',
           moves: [],
           players: { X: 'testUser', O: 'otherUser' },
@@ -68,7 +74,11 @@ describe('MainPage', () => {
       }
       if (event === 'move-response') {
         callback({
-          board: [[1, 'X', 3], [4, 5, 6], [7, 8, 9]],
+          board: [
+            [1, 'X', 3],
+            [4, 5, 6],
+            [7, 8, 9],
+          ],
           nextPlayer: 'O',
           moves: [[1, 0, 1]], // Move at row 1, col 1
           winner: '',
