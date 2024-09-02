@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -7,7 +8,7 @@ const PocketBase = require('pocketbase/cjs');
 import { WinnerCheck } from "./functions/winnerCheck";
 
 const app = express();
-const pb = new PocketBase('https://ttt-nx.pockethost.io/');
+const pb = new PocketBase(process.env.POCKETBASE_URL);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -15,6 +16,8 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   }
 });
+
+// console.log(process.env.S3_BUCKET)
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
