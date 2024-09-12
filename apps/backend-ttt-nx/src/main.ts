@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-const PocketBase = require('pocketbase/cjs');
 const express = require('express');
 require('dotenv').config();
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
+
+import { statusCheck } from './utils/healthCheck';
 
 import { onConnection } from "./controllers/gameController";
 
@@ -19,6 +21,7 @@ const io = new Server(server, {
 });
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/status', statusCheck);
 
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to backend-ttt-nx!' });

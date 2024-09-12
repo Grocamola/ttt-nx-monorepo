@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PocketBase = require('pocketbase/cjs');
 const pb = new PocketBase(process.env.POCKETBASE_URL);
 
@@ -107,6 +108,7 @@ export const onConnection = (io, socket) => {
     });
   
     socket.on('accept-invitation', (data) => {
+      console.log(data)
       if (!data || !data.from || !data.to) {
           console.error('Invalid invitation data:', data);
           return;
@@ -116,9 +118,19 @@ export const onConnection = (io, socket) => {
       const playerXSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === from);
       const playerOSocketId = Object.keys(activeUsers).find(key => activeUsers[key] === to);
   
+      console.log("HERE: playerXSocketId:",playerXSocketId, ", playerOSocketId: " ,playerOSocketId)
       if (playerXSocketId && playerOSocketId) {
           gameSessions[playerXSocketId] = { opponent: playerOSocketId, player: "X" };
           gameSessions[playerOSocketId] = { opponent: playerXSocketId, player: "O" };
+
+          io.emit('game-notification', "game-start")
+
+          io.emit('game-start', {
+            board,
+              currentPlayer: "X",
+              moves,
+              players: { X: from, O: to }
+          })
   
           io.to(playerXSocketId).emit('game-start', {
               board,
@@ -179,6 +191,8 @@ export const onConnection = (io, socket) => {
         nextPlayer: currentPlayer,
         score
       });
+
+      io.emit('new-game-notification', {message: 'success'})
       
     })
   

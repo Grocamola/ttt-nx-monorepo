@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface signinResponseType {
   success: boolean;
   authData?: AuthData;
@@ -41,12 +43,23 @@ export interface gameStartType {
   players: { X: string; O: string };
 }
 
-export interface FormData {
-  username: string;
-  password: string;
-}
 
 export interface ChatMessage {
   sender: string;
   message: string;
 }
+
+
+export const formCheck = z
+  .object({
+    username: z.string().min(3).max(20).trim(),
+    password: z.string().min(3).max(20).trim(),
+  })
+  .required();
+
+
+export type FormErrors = {
+  username?: string;
+  password?: string;
+};
+      
